@@ -1,0 +1,188 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class ControleFinanceiro {
+
+    // ====================== CLASSE ABSTRATA BASE ======================
+    static abstract class Transacao {
+        private String descricao;
+        private double valor;
+        private LocalDate data;
+
+        public Transacao(String descricao, double valor, LocalDate data) {
+            this.descricao = descricao;
+            this.valor = valor;
+            this.data = data;
+        }
+
+        public String getDescricao() {
+            return descricao;
+        }
+
+        public double getValor() {
+            return valor;
+        }
+
+        public LocalDate getData() {
+            return data;
+        }
+
+        public String getDataFormatada() {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            return data.format(formatter);
+        }
+
+        public abstract String getTipo();
+
+        @Override
+        public String toString() {
+            return String.format("[%s] %s - R$ %.2f (%s)", 
+                getTipo(), descricao, valor, getDataFormatada());
+        }
+    }
+
+    // ====================== CLASSE RECEITA ======================
+    static class Receita extends Transacao {
+        public Receita(String descricao, double valor, LocalDate data) {
+            super(descricao, valor, data);
+        }
+
+        @Override
+        public String getTipo() {
+            return "Receita";
+        }
+    }
+
+    // ====================== CLASSE DESPESA ======================
+    static class Despesa extends Transacao {
+        public Despesa(String descricao, double valor, LocalDate data) {
+            super(descricao, valor, data);
+        }
+
+        @Override
+        public String getTipo() {
+            return "Despesa";
+        }
+    }
+
+    // ====================== CLASSE GERENCIADORA ======================
+    static class GerenciadorFinanceiro {
+        private List<Transacao> transacoes;
+
+        public GerenciadorFinanceiro() {
+            this.transacoes = new ArrayList<>();
+        }
+
+        public void adicionarReceita(String descricao, double valor, LocalDate data) {
+            transacoes.add(new Receita(descricao, valor, data));
+        }
+
+        public void adicionarDespesa(String descricao, double valor, LocalDate data) {
+            transacoes.add(new Despesa(descricao, valor, data));
+        }
+
+        public void listarTransacoes() {
+            if (transacoes.isEmpty()) {
+                System.out.println("Nenhuma transação registrada.");
+                return;
+            }
+
+            System.out.println("\nLista de Transações:");
+            for (Transacao t : transacoes) {
+                System.out.println(t);
+            }
+        }
+
+        public double calcularSaldo() {
+            double saldo = 0;
+            for (Transacao t : transacoes) {
+                if (t instanceof Receita) {
+                    saldo += t.getValor();
+                } else if (t instanceof Despesa) {
+                    saldo -= t.getValor();
+                }
+            }
+            return saldo;
+        }
+
+        public void resumoFinanceiro() {
+            double totalReceitas = 0;
+            double totalDespesas = 0;
+
+            for (Transacao t : transacoes) {
+                if (t instanceof Receita) totalReceitas += t.getValor();
+                if (t instanceof Despesa) totalDespesas += t.getValor();
+            }
+
+            System.out.println("\nResumo Financeiro:");
+            System.out.printf("Total de Receitas: R$ %.2f%n", totalReceitas);
+            System.out.printf("Total de Despesas: R$ %.2f%n", totalDespesas);
+            System.out.printf("Saldo Final: R$ %.2f%n", (totalReceitas - totalDespesas));
+        }
+    }
+
+    // ====================== MÉTODO PRINCIPAL ======================
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        GerenciadorFinanceiro gerenciador = new GerenciadorFinanceiro();
+
+        int opcao;
+        do {
+            System.out.println("\n=== Aplicativo de Controle Financeiro ===");
+            System.out.println("1. Adicionar Receita");
+            System.out.println("2. Adicionar Despesa");
+            System.out.println("3. Listar Transações");
+            System.out.println("4. Ver Saldo Atual");
+            System.out.println("5. Exibir Resumo Financeiro");
+            System.out.println("0. Sair");
+            System.out.print("Escolha uma opção: ");
+            opcao = sc.nextInt();
+            sc.nextLine(); // limpar buffer
+
+            switch (opcao) {
+                case 1:
+                    System.out.print("Descrição da receita: ");
+                    String descR = sc.nextLine();
+                    System.out.print("Valor: ");
+                    double valorR = sc.nextDouble();
+                    gerenciador.adicionarReceita(descR, valorR, LocalDate.now());
+                    System.out.println("Receita adicionada com sucesso.");
+                    break;
+
+                case 2:
+                    System.out.print("Descrição da despesa: ");
+                    String descD = sc.nextLine();
+                    System.out.print("Valor: ");
+                    double valorD = sc.nextDouble();
+                    gerenciador.adicionarDespesa(descD, valorD, LocalDate.now());
+                    System.out.println("Despesa adicionada com sucesso.");
+                    break;
+
+                case 3:
+                    gerenciador.listarTransacoes();
+                    break;
+
+                case 4:
+                    System.out.printf("Saldo Atual: R$ %.2f%n", gerenciador.calcularSaldo());
+                    break;
+
+                case 5:
+                    gerenciador.resumoFinanceiro();
+                    break;
+
+                case 0:
+                    System.out.println("Saindo do aplicativo...");
+                    break;
+
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+            }
+
+        } while (opcao != 0);
+
+        sc.close();
+    }
+}
