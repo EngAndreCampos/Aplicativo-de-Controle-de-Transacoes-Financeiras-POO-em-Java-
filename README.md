@@ -17,13 +17,6 @@ ao mesmo tempo em que se cria uma aplicação funcional e útil para o controle 
 
 ---
 
-🧠 Conceitos POO Aplicados
-- Conceito	Descrição
-- Abstração	A classe Transacao define o modelo genérico de uma transação.
-- Encapsulamento	Os atributos são privados e acessados por getters.
-- Herança	Receita e Despesa herdam de Transacao.
-- Polimorfismo	O GerenciadorFinanceiro manipula objetos Transacao de tipos diferentes (receitas e despesas).
-
 ## 🏗️ Estrutura do Projeto
 
 src/
@@ -110,6 +103,13 @@ Escolha uma opção: 3
 [Despesa] Aluguel - R$ 1800.00 (22/10/2025)
 
 ---
+
+🧠 Conceitos POO Aplicados
+Conceito	Descrição
+Abstração	A classe Transacao define o modelo genérico de uma transação.
+Encapsulamento	Os atributos são privados e acessados por getters.
+Herança	Receita e Despesa herdam de Transacao.
+Polimorfismo	O GerenciadorFinanceiro manipula objetos Transacao de tipos diferentes (receitas e despesas).
 
 👨‍💻 Autor
 Desenvolvido por [André Campos] 💻
