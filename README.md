@@ -1,7 +1,3 @@
-# Aplicativo-de-Controle-de-Transacoes-Financeiras-POO-em-Java
-
----
-
 # 💰 Aplicativo de Controle de Transações Financeiras (POO em Java)
 
 Este projeto implementa um **sistema de controle financeiro pessoal**, desenvolvido com **Programação Orientada a Objetos (POO)** em Java.  
